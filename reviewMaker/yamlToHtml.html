@@ -1,0 +1,363 @@
+<html>
+
+<head>
+    <style>
+        body {
+            background: #FFF;
+            font-size: 1.0em;
+            font-family: 'YuGothic', 'Yu Gothic', 'メイリオ', 'Meiryo', 'ＭＳ ゴシック', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: 1.0em;
+            border-width: 0 0 1px 0;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            border-style: solid;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            border-style: solid;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            border-style: solid;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid #333;
+        }
+
+        table th {
+            font-size: 0.8em;
+            text-align: center;
+            padding: 1 2px;
+            table-layout: auto;
+            color: #FFF;
+            background-color: #69E;
+            border: 1px solid #333;
+        }
+
+        table td {
+            padding: 1 2px;
+            border: 1px solid;
+            overflow-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .error {
+            background-color: #F55;
+            text-align: center;
+        }
+
+        .tabGroup {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .tabGroup:after {
+            content: '';
+            width: 100%;
+            height: 3px;
+            background: #36A;
+            display: block;
+            order: -1;
+        }
+
+        .tabLabel {
+            color: White;
+            background: LightGray;
+            border-radius: 2px 2px 0 0;
+            cursor: pointer;
+            flex: 1;
+            font-weight: bold;
+            text-align: center;
+            order: -1;
+            padding: 5px .5em;
+            position: relative;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        .tabLabel:not(:last-of-type) {
+            margin-right: 5px;
+        }
+
+        @media screen {
+            .tabContents {
+                width: 100%;
+                height: 0;
+                overflow: hidden;
+                opacity: 0;
+            }
+        }
+
+        .tabClass:checked+.tabLabel {
+            background: #36A;
+        }
+
+        .tabClass:checked+.tabLabel+.tabContents {
+            height: auto;
+            overflow: auto;
+            padding: 15px;
+            opacity: 1;
+            transition: .3s opacity;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .tabClass {
+            display: none;
+        }
+
+        @media print {
+            body {
+                margin: 0px;
+                box-shadow: 0;
+            }
+
+            .tabClass {
+                display: flex;
+            }
+
+            .tabContents {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                opacity: 1;
+                page-break-after: always;
+            }
+
+            .tabLabel {
+                display: none;
+            }
+
+            .tabClass:checked+.tabLabel {
+                background: none;
+            }
+
+            .tabClass:checked+.tabLabel+.tabContents {
+                height: auto;
+                overflow: auto;
+                padding: 15px;
+                box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ 契約名 }} {{ サブ要件 }} レビュー記録</h1>
+    <div class="tabGroup">
+        <input type="radio" id="tabId1" name="tab" class="tabClass" checked="checked"><label class="tabLabel"
+            for="tabId1">TOP</label>
+        <div class="tabContents">
+            <h2>委託概要</h2>
+            <em>名称:</em> {{ 契約名 }}<br>
+            <em>要件:</em> {{ 要件名 }} ({{ サブ要件 }})<br>
+            <em>レビュー記録作成:</em> {{ 会社名 }}<br>
+
+            <h2>工程別成果物承認日</h2>
+
+            {%- for key, filelist in 承認トレース.items() %}
+
+            <h4>{{key}}工程</h4>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>ファイル名</th>
+                        <th>委託先承認日</th>
+                        <th>委託元承認日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for key, value in filelist.items() %}
+                    <tr>
+                        <td style="text-align: center;">{{loop.index}}</td>
+                        <td style="text-align: left;">{{key}}</td>
+                        {%- if ((value.dateInner|string) != '1970-01-01') and (value.dateInner < value.dateOuter) %}
+                        <td>
+                        {%- else -%}
+                        <td class="error">
+                        {%- endif -%}
+                        {{value.dateInner}}</td>
+                        {%- if ((value.dateOuter|string) != '1970-01-01') and (value.dateInner < value.dateOuter) %}
+                        <td>
+                        {%- else -%}
+                        <td class="error">
+                        {%- endif -%}
+                        {{value.dateOuter}}</td>
+                    </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+            {%- endfor %}
+
+            <h3>工程別レビュー集計</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>工程</th>
+                        <th>レビュー回数</th>
+                        <th>指摘件数</th>
+                        <th>クローズ件数</th>
+                        <th>未クローズ件数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for key, reviewCnt in レビュー集計.items() %}
+                    <tr>
+                        <td style="text-align: center;">{{key}}</td>
+                        <td style="text-align: right;">{{reviewCnt.レビュー回数}}</td>
+                        <td style="text-align: right;">{{reviewCnt.指摘件数}}</td>
+                        <td style="text-align: right;">{{reviewCnt.クローズ件数}}</td>
+                        <td style="text-align: right;">{{reviewCnt.未クローズ件数}}</td>
+                    </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {%- for p in 委託工程 %}
+
+        <input type="radio" id="tabId{{loop.index+2}}" name="tab" class="tabClass"><label class="tabLabel"
+            for="tabId{{loop.index+2}}">{{p}}工程レビュー記録</label>
+        <div class="tabContents">
+
+            <h2>{{p}}工程レビュー記録</h2>
+
+            {%- for r in レビュー | selectattr("レビュー工程", "eq", p) %}
+            {%- set outputType = [] %}
+            {%- if r.ファイル -%}
+            {%- for file in r.ファイル -%}
+            {%- set dummy = outputType.append(file[0]) -%}
+            {%- endfor -%}
+            {%- endif %}
+
+            <h3>実施番号{{loop.index}}: {{サブ要件}} {{ outputType | unique | join("/") }} {% if r.レビューワ -%}{%- if 'Tech' in r.レビューワ -%}内部{%- else -%}委託元{%- endif -%}{%- else -%}Error{%- endif -%}レビュー</h3>
+
+            <h4>レビュー概要</h4>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>内容</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left;">実施日時</td>
+                        <td style="text-align: left;">{{r.実施日.0}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">開催時間(分)</td>
+                        <td style="text-align: left;">{{r.実施日.1}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">実施形式</td>
+                        <td style="text-align: left;">{{r.レビュー形式}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">レビューイ</td>
+                        <td style="text-align: left;">{{r.レビューイ}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">レビューア</td>
+                        <td style="text-align: left;">{{r.レビューワ}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">再レビュー判定</td>
+                        <td style="text-align: left;">{{r.再レビュー}}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">レビュー承認</td>
+                        <td style="text-align: left;">{{r.レビュー承認.1}}／{{r.レビュー承認.0}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>レビュー対象物</h4>
+
+            {%- if r.ファイル %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>種類</th>
+                        <th>ファイル名</th>
+                        <th>レビュー範囲</th>
+                        <th>文書番号</th>
+                        <th>レビュー規模</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for file in r.ファイル %}
+                    <tr>
+                        <td style="text-align: right;">{{loop.index}}</td>
+                        <td style="text-align: center;">{{file.0}}</td>
+                        <td style="text-align: left;">{{file.1}}</td>
+                        <td style="text-align: center;">{{file.2}}</td>
+                        <td style="text-align: right;">{{file.3}}</td>
+                        <td style="text-align: right;">{{file.4}}</td>
+                    </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+            {%- else %}
+            <em>レビュー対象物なし</em>
+            {%- endif %}
+
+            <h4>指摘事項</h4>
+            {%- if r.指摘事項 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>指摘箇所</th>
+                        <th>指摘者</th>
+                        <th>指摘内容</th>
+                        <th>対策</th>
+                        <th>対策日</th>
+                        <th>種類</th>
+                        <th>状態</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for indicate in r.指摘事項 %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{indicate.指摘.0}}</td>
+                        <td>{{indicate.指摘.2}}</td>
+                        <td>{{indicate.指摘.1}}</td>
+                        <td>{{indicate.対策.0}}</td>
+                        <td>{{indicate.対策.1}}</td>
+                        <td>{{indicate.対策.2}}</td>
+                        <td>{{indicate.状況}}</td>
+                    </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+            {%- else %}
+            <em>レビュー指摘なし</em>
+            {%- endif%}
+            {%- endfor %}
+        </div>
+        {%- endfor %}
+    </div>
+</body>
+
+</html>
