@@ -346,7 +346,7 @@
                         <td>{{(indicate.2 or 'error')| replaceBR}}</td>
                         <td>{{indicate.3 or 'error'}}</td>
                         <td>{{indicate.4 or 'error'}}</td>
-                        {%if (indicate.3 != None) %} <td>Close</td> {% else %} <td>未完了</td> {% endif %}
+                        {% if (indicate.3 != None) %} <td>Close</td> {% else %} <td>未完了</td> {% endif %}
                     </tr>
                     {%- endfor %}
                 </tbody>

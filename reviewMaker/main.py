@@ -5,7 +5,7 @@ import jinja2
 import datetime
 from cerberus import Validator
 from pprint import pprint
-
+import pathlib
 
 def formatCommitDate(baseData, yamlData):
     allFilelist = dict()
@@ -63,44 +63,47 @@ def formatPhaseReviewCnt(baseData, yamlData):
 
 if __name__ == "__main__":
     base_dir = './reviewMaker/'
-    baseName = 'baseData.yml'
-    reviewName = 'reviewData'
-    jinjaFilename = 'yamlToHtml.html'
-    reviewYamlFilename = reviewName + '.yml'
+    projectFilename = 'projectData.yml'
     reviewYamlSchemaFilename = 'reviewSchema.yml'
+
+    # フォルダ内に保存されているファイル一覧
+    review_list = list(pathlib.Path(base_dir).glob('**/*_reviewData.yml'))
 
     # jinjaの初期化
     jinja2FsLoader = jinja2.FileSystemLoader(base_dir, encoding='utf-8')
     jinja2Environment = jinja2.Environment(loader=jinja2FsLoader)
     jinja2Environment.filters.update({'replaceBR': lambda content: content.replace('\n', '<br>')})
-    jinja2Template = jinja2Environment.get_template(jinjaFilename)
+    jinja2Template = jinja2Environment.get_template('yamlToHtml.html')
 
     # レビュー議事録を開く
-    with open(base_dir + baseName, encoding="utf-8") as yamlFile:
+    with open(base_dir + projectFilename, encoding="utf-8") as yamlFile:
         # YAMLをpythonの変数に格納
-        baseData = yaml.safe_load(yamlFile.read())
+        yamlData = yaml.safe_load(yamlFile.read())
 
     # レビュー議事録を開く
-    with open(base_dir + reviewYamlFilename, encoding="utf-8") as yamlFile:
-        # YAMLをpythonの変数に格納
-        yamlData = [obj for obj in yaml.safe_load_all(yamlFile.read())]
+    for reviewDataFile in review_list:
+        with open(base_dir + reviewDataFile.name, encoding="utf-8") as yamlFile:
+            # YAMLをpythonの変数に格納
+            reviewData = [obj for obj in yaml.safe_load_all(yamlFile.read())]
 
-        # 集計データを追加
-        yamlData = sorted(yamlData, key=lambda x: x['実施日時(YYYY-M-D hh:mm:ss)'])
-        baseData['承認トレース'] = formatCommitDate(baseData, yamlData)
-        baseData['レビュー集計'] = formatPhaseReviewCnt(baseData, yamlData)
-        baseData['レビュー'] = yamlData
+            # 集計データを追加
+            reviewData = sorted(reviewData, key=lambda x: x['実施日時'])
+            yamlData['承認トレース'] = formatCommitDate(yamlData, reviewData)
+            yamlData['レビュー集計'] = formatPhaseReviewCnt(yamlData, reviewData)
+            yamlData['レビュー'] = reviewData
 
-#        with open(base_dir + reviewYamlSchemaFilename, encoding="utf-8") as schemaFile:
-#            reviewSchema = yaml.safe_load(schemaFile.read())
-#            reviewValidator = Validator()
-#            check = reviewValidator.validate(yamlData, reviewSchema)
-#            if check == False:
-#                pprint(reviewValidator.errors)
+            with open(base_dir + reviewYamlSchemaFilename, encoding="utf-8") as schemaFile:
+                reviewSchema = yaml.safe_load(schemaFile.read())
+                reviewValidator = Validator(reviewSchema)
+                for data in reviewData:
+                    check = reviewValidator.validate(data)
+                    if check == False:
+                        print("in " + reviewDataFile.name)
+                        pprint(reviewValidator.errors)
 
-        # jinja2経由でmarkdownファイルに出力に変換
-        htmlData = jinja2Template.render(baseData)
+            # jinja2経由でmarkdownファイルに出力に変換
+            htmlData = jinja2Template.render(yamlData)
 
-        # htmlファイルを出力
-        with open(base_dir + reviewName + ".html", 'w', newline='', encoding="utf-8") as f:
-            f.write(htmlData)
+            # htmlファイルを出力
+            with open(base_dir + pathlib.PurePath(reviewDataFile.name).stem + ".html", 'w', newline='', encoding="utf-8") as f:
+                f.write(htmlData)

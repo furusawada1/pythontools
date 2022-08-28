@@ -1,57 +1,61 @@
 ---
-契約名: {type: string, required: True}
-要件名: {type: string, required: True}
-サブ要件: {type: string, required: True}
-会社名: {type: string, required: True}
-承認トレース: {required: True}
-レビュー集計: {required: True}
-委託工程: {type: list, schema: {type: string}, minlength: 1}
-レビュー: {type: list, required: True,
-          schema: {
-            type: dict,
-            schema: {
-              レビュー概要: {type: string, required: True},
-              実施日: {type: list, required: True, empty: True,
-                      schema: {
-                        type: [datetime, integer], minlength: 2, maxlength: 2
-                      }
-              },
-              ファイル: {type: list, required: True, minlength: 1,
-                        schema: {
-                          type: list, minlength: 5, maxlength: 5,
-                          schema: {
-                            required: True
-                          }
-                        }
-              },
-              再レビュー: {type: string, required: True},
-              レビューワ: {type: string, required: True},
-              レビューイ: {type: string, required: True},
-              レビュー工程: {type: string, required: True},
-              レビュー形式: {type: string, required: True},
-              指摘事項: {type: list, required: True, nullable: True,
-                        schema: {
-                            type: dict, required: True,
-                            schema: {
-                              指摘: {type: list, required: True, empty: False, minlength: 3, maxlength: 3,
-                                      schema: {
-                                        type: string, required: True, empty: False
-                                      }
-                              },
-                              対策: {type: list, required: True, empty: False, minlength: 3, maxlength: 3,
-                                      schema: {
-                                        type: string, required: True, empty: False
-                                      }
-                              },
-                              状況: {type: string, required: True, empty: False, regex: "Close"}
-                            }
-                        }
-                      },
-              レビュー承認: {type: list, required: True, empty: False,
-                            schema: {
-                              type: string, required: True
-                            }
-                          },
-            }
-          }
-        } 
+概要:
+  type: string
+  required: True
+実施日時:
+  type: datetime
+  required: True
+実施時間_分:
+  type: integer
+  required: True
+形式:
+  type: string
+  allowed: ["回覧", "パスアラウンド"]
+  required: True
+工程:
+  type: string
+  allowed: ["設計", "実装"]
+  required: True
+参加者:
+  type: list
+  schema:
+    type: [string, string]
+  minlength: 2
+  maxlength: 2
+  required: True
+ファイル:
+  type: dict
+  required: True
+  minlength: 1
+  schema:
+    基本設計書:
+      type: list
+      minlength: 4
+      maxlength: 4
+      schema:
+        type: [string, string, string, string]
+        required: True
+指摘:
+  type: list
+  schema:
+    type: list
+    minlength: 5
+    maxlength: 5
+    nullable: True
+    schema:
+      type: [string, date]
+      required: True
+      nullable: True
+  required: True
+  nullable: True
+再レビュー:
+  type: string
+  allowed: ["必要", "不要"]
+  required: True
+レビュー承認者_承認日:
+  type: list
+  schema:
+    type: [string, date]
+    required: True
+  required: True
+  empty: False
