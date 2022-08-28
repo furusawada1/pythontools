@@ -239,7 +239,7 @@
 
             <h2>{{p}}工程レビュー記録</h2>
 
-            {%- for r in レビュー | selectattr("レビュー工程", "eq", p) %}
+            {%- for r in レビュー | selectattr("工程", "eq", p) %}
             {%- set outputType = [] %}
             {%- if r.ファイル -%}
             {%- for file in r.ファイル -%}
@@ -247,7 +247,7 @@
             {%- endfor -%}
             {%- endif %}
 
-            <h3>実施番号{{loop.index}}: {{サブ要件}} {{ outputType | unique | join("/") }} {% if r.レビューワ -%}{%- if 'Tech' in r.レビューワ -%}内部{%- else -%}委託元{%- endif -%}{%- else -%}Error{%- endif -%}レビュー</h3>
+            <h3>実施番号{{loop.index}}: {{サブ要件}} {{ outputType | unique | join("/") }} {% if r.参加者[0] -%}{%- if 'Tech' in r.参加者[1] -%}内部{%- else -%}委託元{%- endif -%}{%- else -%}Error{%- endif -%}レビュー</h3>
 
             <h4>レビュー概要</h4>
 
@@ -261,23 +261,23 @@
                 <tbody>
                     <tr>
                         <td style="text-align: left;">実施日時</td>
-                        <td style="text-align: left;">{{r.実施日.0}}</td>
+                        <td style="text-align: left;">{{r.実施日時}}</td>
                     </tr>
                     <tr>
                         <td style="text-align: left;">開催時間(分)</td>
-                        <td style="text-align: left;">{{r.実施日.1}}</td>
+                        <td style="text-align: left;">{{r.実施時間_分}}</td>
                     </tr>
                     <tr>
                         <td style="text-align: left;">実施形式</td>
-                        <td style="text-align: left;">{{r.レビュー形式}}</td>
+                        <td style="text-align: left;">{{r.形式}}</td>
                     </tr>
                     <tr>
                         <td style="text-align: left;">レビューイ</td>
-                        <td style="text-align: left;">{{r.レビューイ}}</td>
+                        <td style="text-align: left;">{{r.参加者[0]}}</td>
                     </tr>
                     <tr>
                         <td style="text-align: left;">レビューア</td>
-                        <td style="text-align: left;">{{r.レビューワ}}</td>
+                        <td style="text-align: left;">{{r.参加者[1]}}</td>
                     </tr>
                     <tr>
                         <td style="text-align: left;">再レビュー判定</td>
@@ -285,7 +285,7 @@
                     </tr>
                     <tr>
                         <td style="text-align: left;">レビュー承認</td>
-                        <td style="text-align: left;">{{r.レビュー承認.1}}／{{r.レビュー承認.0}}</td>
+                        <td style="text-align: left;">{{r.レビュー承認者_承認日.1}} {{r.レビュー承認者_承認日.0}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -305,15 +305,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {%- for file in r.ファイル %}
+                    {%- for key, types in r.ファイル.items() %}
+                    {%- for file in types %}
                     <tr>
                         <td style="text-align: right;">{{loop.index}}</td>
-                        <td style="text-align: center;">{{file.0}}</td>
-                        <td style="text-align: left;">{{file.1}}</td>
-                        <td style="text-align: center;">{{file.2}}</td>
+                        <td style="text-align: center;">{{key}}</td>
+                        <td style="text-align: left;">{{file.0}}</td>
+                        <td style="text-align: center;">{{file.1}}</td>
+                        <td style="text-align: right;">{{file.2}}</td>
                         <td style="text-align: right;">{{file.3}}</td>
-                        <td style="text-align: right;">{{file.4}}</td>
                     </tr>
+                    {%- endfor %}
                     {%- endfor %}
                 </tbody>
             </table>
@@ -322,13 +324,12 @@
             {%- endif %}
 
             <h4>指摘事項</h4>
-            {%- if r.指摘事項 %}
+            {%- if r.指摘 and r.指摘[0] %}
             <table>
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>指摘箇所</th>
-                        <th>指摘者</th>
                         <th>指摘内容</th>
                         <th>対策</th>
                         <th>対策日</th>
@@ -337,16 +338,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {%- for indicate in r.指摘事項 %}
+                    {%- for indicate in r.指摘 %}
                     <tr>
                         <td>{{loop.index}}</td>
-                        <td>{{indicate.指摘.0}}</td>
-                        <td>{{indicate.指摘.2}}</td>
-                        <td>{{indicate.指摘.1}}</td>
-                        <td>{{indicate.対策.0}}</td>
-                        <td>{{indicate.対策.1}}</td>
-                        <td>{{indicate.対策.2}}</td>
-                        <td>{{indicate.状況}}</td>
+                        <td>{{indicate.0 | replaceBR}}</td>
+                        <td>{{indicate.1 | replaceBR}}</td>
+                        <td>{{(indicate.2 or 'error')| replaceBR}}</td>
+                        <td>{{indicate.3 or 'error'}}</td>
+                        <td>{{indicate.4 or 'error'}}</td>
+                        {%if (indicate.3 != None) %} <td>Close</td> {% else %} <td>未完了</td> {% endif %}
                     </tr>
                     {%- endfor %}
                 </tbody>
