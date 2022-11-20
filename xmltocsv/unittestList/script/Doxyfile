@@ -1,0 +1,22 @@
+DOXYFILE_ENCODING       = UTF-8
+OUTPUT_DIRECTORY        = ../../build/doxygen
+
+GENERATE_LATEX          = NO
+GENERATE_HTML           = NO
+GENERATE_XML            = YES
+
+XML_OUTPUT              = xml
+XML_PROGRAMLISTING      = NO
+XML_NS_MEMB_FILE_SCOPE  = NO
+
+INPUT                   = ../../test
+RECURSIVE               = NO
+FILE_PATTERNS           = *.c
+
+EXCLUDE_SYMBOLS         = setUp,tearDown
+OPTIMIZE_OUTPUT_FOR_C   = YES
+
+EXTRACT_ALL             = NO
+
+GENERATE_LEGEND        = NO
+DOT_CLEANUP            = NO
