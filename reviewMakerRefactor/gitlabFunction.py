@@ -2,7 +2,7 @@ import json
 import zipfile
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
-
+from urllib.parse import quote
 class GitLabAPI:
     def __init__(self, project_id, access_token):
         self.project_id = project_id
@@ -20,7 +20,7 @@ class GitLabAPI:
             response = urlopen(diff_request)
             return json.loads(response.read())
         except HTTPError as e:
-            print(f"HTTPエラー: {e.code}")
+            print(f"HTTPエラー: {e.code} URL: {diff_url}")
         except URLError as e:
             print(f"URLエラー: {e.reason}")
 
@@ -32,16 +32,14 @@ class GitLabAPI:
                 for change in diff_data["diffs"]:
                     if change["new_file"] or change["renamed_file"]:
                         file_path = change["new_path"]
-
                         try:
-                            file_url = f"{self.api_base_url}/repository/files/{file_path}/raw?ref={to_hash}"
-                            print(file_url)
+                            file_url = f"{self.api_base_url}/repository/files/{quote(file_path, safe='')}/raw?ref={to_hash}"
                             file_request = Request(file_url, headers=self.headers)
                             file_response = urlopen(file_request)
                             file_content = file_response.read()
                             zf.writestr(file_path, file_content)
                         except HTTPError as e:
-                            print(f"HTTPエラー: {e.code}")
+                            print(f"HTTPエラー: {e.code} URL: {file_url}")
                         except URLError as e:
                             print(f"URLエラー: {e.reason}")
 
@@ -81,30 +79,31 @@ class GitLabAPI:
             return repo_url, mr_title, before_hash, after_hash
 
         return None, None, None, None
- 
-project_id = 38758936
-access_token = "glpat-ZxaZ1xoMhDv5YgswyKsc"
-gitlab_api = GitLabAPI(project_id, access_token)
 
-from_hash = "9fdfce19"
-to_hash = "a3074cc2"
-diff_data = gitlab_api.get_diff_data(from_hash, to_hash)
-print(json.dumps(diff_data, indent=2))
+if __name__ == "__main__":
+    project_id = 38758936
+    access_token = "glpat-ZxaZ1xoMhDv5YgswyKsc"
+    gitlab_api = GitLabAPI(project_id, access_token)
 
-# fetch_files_from_gitlab(from_hash, to_hash, output_zip)を使用して、2つのコミット間の新規ファイルまたは変更されたファイルをダウンロードし、ZIPファイルに保存します。
-output_zip = "output.zip"
-gitlab_api.fetch_files_from_gitlab(from_hash, to_hash, output_zip)
+    from_hash = "9fdfce19"
+    to_hash = "0b9a8c18"
+    diff_data = gitlab_api.get_diff_data(from_hash, to_hash)
+    print(json.dumps(diff_data, indent=2))
 
-# get_project_data() を使用して、プロジェクトのデータを取得します。
-project_data = gitlab_api.get_project_data()
+    # fetch_files_from_gitlab(from_hash, to_hash, output_zip)を使用して、2つのコミット間の新規ファイルまたは変更されたファイルをダウンロードし、ZIPファイルに保存します。
+    output_zip = "output.zip"
+    gitlab_api.fetch_files_from_gitlab(from_hash, to_hash, output_zip)
 
-# get_merge_request_data(merge_request_id) を使用して、特定のマージリクエストのデータを取得します。
-merge_request_id = 1
-merge_request_data = gitlab_api.get_merge_request_data(merge_request_id)
+    # get_project_data() を使用して、プロジェクトのデータを取得します。
+    project_data = gitlab_api.get_project_data()
 
-# 定のマージリクエストに関連する情報を取得します。
-merge_request_id = 1
-repo_url, mr_title, before_hash, after_hash = gitlab_api.fetch_merge_request_info(merge_request_id)
+    # get_merge_request_data(merge_request_id) を使用して、特定のマージリクエストのデータを取得します。
+    merge_request_id = 1
+    merge_request_data = gitlab_api.get_merge_request_data(merge_request_id)
+
+    # 定のマージリクエストに関連する情報を取得します。
+    merge_request_id = 1
+    repo_url, mr_title, before_hash, after_hash = gitlab_api.fetch_merge_request_info(merge_request_id)
 
 
 #以下の条件でpythonの処理の作成をお願いします。
