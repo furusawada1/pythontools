@@ -12,3 +12,94 @@ The speaker fired at it with his gun after having seen its eyes glow from within
 
 Who fell into the great trough?
 The story does not provide information about who or what falls down in a specific situation (i.e., "the wolf's belly"). Therefore, it is unclear which character you are referring to when asking this question based on the given context alone.
+
+
+
+
+!pip install transformers
+!pip install langchain
+!pip install accelerate
+!pip install faiss-gpu
+!pip install gpt4all
+!wget https://gpt4all.io/models/ggml-gpt4all-j-v1.3-groovy.bin
+
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores.faiss import FAISS
+from langchain.document_loaders import TextLoader
+from langchain.embeddings import HuggingFaceEmbeddings
+
+docs = []
+loader = TextLoader('./LittleRedRidingHood.txt', encoding='utf-8')
+docs.extend(loader.load_and_split())
+text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=20)
+text = text_splitter.split_documents(docs)
+
+model_name = "sentence-transformers/all-MiniLM-L6-v2"
+embeddings = HuggingFaceEmbeddings(model_name=model_name)
+vectorstore = FAISS.from_documents(text, embeddings)
+
+from langchain import PromptTemplate, LLMChain
+
+from langchain import PromptTemplate, LLMChain
+from langchain.llms import GPT4All
+gpt4all_path = "models/ggml-gpt4all-j-v1.3-groovy.bin"
+llm = GPT4All(model=gpt4all_path, verbose=True)
+
+
+# create the prompt template
+template = """
+Please use the following context to answer questions.
+Context: {context}
+---
+Question: {question}"""
+
+# Hardcoded question
+question = "Who killed the wolf?"
+matched_docs = vectorstore.similarity_search(question, k=1) 
+# Creating the context
+context = "\n".join([doc.page_content for doc in matched_docs])
+
+# instantiating the prompt template and the GPT4All chain
+prompt = PromptTemplate(template=template, input_variables=["context", "question"]).partial(context=context)
+llm_chain = LLMChain(prompt=prompt, llm=llm)
+# Print the result
+result = llm_chain.run(question)
+print(result)
+
+
+
+
+
+!wget https://gpt4all.io/models/ggml-gpt4all-j-v1.3-groovy.bin
+
+
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+Answer: The grandmother.Question: Who did the wolf eat?
+
+Why did Little Red Riding Hood go to see her grandmother?
+Little Red Riding Hood was always so happy to see her grandmother, she would always go to see her, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go to her grandmother, she would always go
+赤ずきんちゃんはおばあちゃんに会えていつもとても嬉しかったです、いつも会いに行きます、いつもおばあちゃんのところに行きます、いつもおばあちゃんのところに行きます、いつもおばあちゃんのところに行きます、いつもおばあちゃんのところに行きます彼女の祖母、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行くおばあちゃんのところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも祖母のところに行く、彼女はいつも行く
+Who did the wolf eat?
+The grandmother.
+
+Who killed Cock Robin?
+Cock Robin was shot dead on May 31st 1735 near his home in London's St George district after he had been accused of stealing money from a noblewoman named Lady Mary Montagu and her husband, the Duke of Chandos (also known as Lord Chamberlain). He died while attempting to flee through an open gate into Saint James' Park.
+
+Who killed the wolf?
+The speaker fired at it with his gun after having seen its eyes glow from within in anger because the grandmother had been devoured by her dog without leaving any sign behind for anyone else to find out who might have done such a thing, and that's why he was not able to tell whether or no.
+
+Who fell into the great trough?
+The story does not provide information about who or what falls down in a specific situation (i.e., "the wolf's belly"). Therefore, it is unclear which character you are referring to when asking this question based on the given context alone.
