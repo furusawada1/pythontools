@@ -60,3 +60,304 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=index.as_retriever(search_kwargs={"k": 4}),
     verbose=True,
 )
+
+
+llama.cpp: loading model from ./llama-2-7b-chat.ggmlv3.q4_K_M.bin
+llama_model_load_internal: format     = ggjt v3 (latest)
+llama_model_load_internal: n_vocab    = 32000
+llama_model_load_internal: n_ctx      = 512
+llama_model_load_internal: n_embd     = 4096
+llama_model_load_internal: n_mult     = 256
+llama_model_load_internal: n_head     = 32
+llama_model_load_internal: n_head_kv  = 32
+llama_model_load_internal: n_layer    = 32
+llama_model_load_internal: n_rot      = 128
+llama_model_load_internal: n_gqa      = 1
+llama_model_load_internal: rnorm_eps  = 1.0e-06
+llama_model_load_internal: n_ff       = 11008
+llama_model_load_internal: freq_base  = 10000.0
+llama_model_load_internal: freq_scale = 1
+llama_model_load_internal: ftype      = 15 (mostly Q4_K - Medium)
+llama_model_load_internal: model size = 7B
+llama_model_load_internal: ggml ctx size =    0.08 MB
+llama_model_load_internal: mem required  = 4193.33 MB (+  256.00 MB per state)
+llama_new_context_with_model: kv self size  =  256.00 MB
+AVX = 0 | AVX2 = 0 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 0 | NEON = 0 | ARM_FMA = 0 | F16C = 0 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 0 | SSE3 = 1 | VSX = 0 | 
+Of course! Here is an example of a C function that takes an array of integers as input and returns the average of those numbers:
+```
+#include <stdio.h>
+
+double avg(int arr[], int size) {
+  double sum = 0;
+  int i;
+  
+  for (i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+  
+  return (sum / size);
+}
+```
+Here's how the function works:
+
+1. The function takes two parameters: `arr` (an array of integers) and `size` (the number of elements in the array).
+2. The function initializes a variable `sum` to 0, which will be used to calculate the sum of all the elements in the array.
+3. It then loops through the array using a `for` loop, adding each element to the `sum` variable.
+4. Finally, the function divides the `sum` variable by the `size` parameter to get the average value.
+Here's an example of how you could use this function:
+```
+int main() {
+  int arr[5] = {1, 2, 3, 4, 5};
+...
+}
+```
+In this example, the function `avg` takes an array of five integers as input and returns their average value. The `main` function then prints the average value to the console.
+I hope this helps! Let me know if you have any questions or need further clarification.
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+
+llama_print_timings:        load time = 63015.99 ms
+llama_print_timings:      sample time =   417.01 ms /   387 runs   (    1.08 ms per token,   928.03 tokens per second)
+llama_print_timings: prompt eval time = 63015.06 ms /    54 tokens ( 1166.95 ms per token,     0.86 tokens per second)
+llama_print_timings:        eval time = 478903.47 ms /   386 runs   ( 1240.68 ms per token,     0.81 tokens per second)
+llama_print_timings:       total time = 544277.12 ms
+
+
+
+
+
+
+-----------------------------------------------------------------------------------
+colab
+14.496sec
+
+AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
+Of course! Here is an example of a C function that takes an array of integers as input and returns the average of those numbers:
+```
+#include <stdio.h>
+
+double avg(int arr[], int size) {
+  double sum = 0;
+  int i;
+
+  for (i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+
+  return sum / size;
+}
+```
+Here's how the function works:
+
+1. The function takes two parameters: `arr` (an array of integers) and `size` (the number of elements in the array).
+2. The function initializes a variable `sum` to 0, which will be used to calculate the sum of all the elements in the array.
+3. It then loops through each element in the array using a `for` loop, adding each element to the `sum` variable.
+4. Once the loop is finished, the function divides the `sum` variable by the `size` parameter to get the average of the array.
+5. Finally, the function returns the average as a double value.
+
+Here's an example of how you could use this function:
+```
+int main() {
+  int arr[5] = {1, 2, 3, 4, 5};
+  double avg = avg(arr, sizeof(arr) / sizeof(arr[0]));
+  printf("The average of the array is %f\n", avg);
+  return 0;
+}
+```
+This code will output "The average of the array is 3.2".
+
+
+Aug 18, 2023, 4:30:54 PM	WARNING	llama_print_timings: total time = 12436.28 ms
+Aug 18, 2023, 4:30:54 PM	WARNING	llama_print_timings: eval time = 10035.19 ms / 366 runs ( 27.42 ms per token, 36.47 tokens per second)
+Aug 18, 2023, 4:30:54 PM	WARNING	llama_print_timings: prompt eval time = 577.30 ms / 54 tokens ( 10.69 ms per token, 93.54 tokens per second)
+Aug 18, 2023, 4:30:54 PM	WARNING	llama_print_timings: sample time = 549.42 ms / 367 runs ( 1.50 ms per token, 667.98 tokens per second)
+Aug 18, 2023, 4:30:54 PM	WARNING	llama_print_timings: load time = 577.41 ms
+Aug 18, 2023, 4:30:41 PM	WARNING	llama_new_context_with_model: kv self size = 256.00 MB
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: total VRAM used: 4365 MB
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: offloaded 35/35 layers to GPU
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: offloading k cache to GPU
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: offloading v cache to GPU
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: offloading non-repeating layers to GPU
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: offloading 32 repeating layers to GPU
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: allocating batch_size x (512 kB + n_ctx x 128 B) = 288 MB VRAM for the scratch buffer
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: mem required = 372.40 MB (+ 256.00 MB per state)
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: using CUDA for GPU acceleration
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: ggml ctx size = 0.08 MB
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: model size = 7B
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: ftype = 15 (mostly Q4_K - Medium)
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: freq_scale = 1
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: freq_base = 10000.0
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_ff = 11008
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: rnorm_eps = 5.0e-06
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_gqa = 1
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_rot = 128
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_layer = 32
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_head_kv = 32
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_head = 32
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_mult = 256
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_embd = 4096
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_ctx = 512
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: n_vocab = 32000
+Aug 18, 2023, 4:30:38 PM	WARNING	llama_model_load_internal: format = ggjt v3 (latest)
+Aug 18, 2023, 4:30:38 PM	WARNING	llama.cpp: loading model from /content/llama-2-7b-chat.ggmlv3.q4_K_M.bin
+Aug 18, 2023, 4:30:35 PM	WARNING	Device 0: Tesla T4, compute capability 7.5
+Aug 18, 2023, 4:30:35 PM	WARNING	ggml_init_cublas: found 1 CUDA devices:
+Aug 18, 2023, 4:30:28 PM	WARNING	WARNING:root:kernel e09c474a-db54-4872-a8d0-093d4b84b1a5 restarted
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------
+A100
+
+
+llama.cpp: loading model from /workspace/llama-2-7b-chat.ggmlv3.q4_K_M.bin
+llama_model_load_internal: format     = ggjt v3 (latest)
+llama_model_load_internal: n_vocab    = 32000
+llama_model_load_internal: n_ctx      = 512
+llama_model_load_internal: n_embd     = 4096
+llama_model_load_internal: n_mult     = 256
+llama_model_load_internal: n_head     = 32
+llama_model_load_internal: n_head_kv  = 32
+llama_model_load_internal: n_layer    = 32
+llama_model_load_internal: n_rot      = 128
+llama_model_load_internal: n_gqa      = 1
+llama_model_load_internal: rnorm_eps  = 5.0e-06
+llama_model_load_internal: n_ff       = 11008
+llama_model_load_internal: freq_base  = 10000.0
+llama_model_load_internal: freq_scale = 1
+llama_model_load_internal: ftype      = 15 (mostly Q4_K - Medium)
+llama_model_load_internal: model size = 7B
+llama_model_load_internal: ggml ctx size =    0.08 MB
+llama_model_load_internal: using CUDA for GPU acceleration
+llama_model_load_internal: mem required  =  372.40 MB (+  256.00 MB per state)
+llama_model_load_internal: allocating batch_size x (512 kB + n_ctx x 128 B) = 288 MB VRAM for the scratch buffer
+llama_model_load_internal: offloading 32 repeating layers to GPU
+llama_model_load_internal: offloading non-repeating layers to GPU
+llama_model_load_internal: offloading v cache to GPU
+llama_model_load_internal: offloading k cache to GPU
+llama_model_load_internal: offloaded 35/35 layers to GPU
+llama_model_load_internal: total VRAM used: 4365 MB
+llama_new_context_with_model: kv self size  =  256.00 MB
+AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
+Of course! Here is an example of a C function that takes an array of integers as input and returns the average of those numbers:
+```
+#include <stdio.h>
+
+double avg(int arr[], int size) {
+  double sum = 0;
+  int i;
+
+  for (i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+
+  return sum / size;
+}
+```
+Here's how the function works:
+
+1. The function takes two parameters: `arr` (an array of integers) and `size` (the number of elements in the array).
+2. The function initializes a variable `sum` to 0, which will be used to calculate the sum of all the elements in the array.
+3. It then loops through each element in the array using a `for` loop, adding each element to the `sum` variable.
+4. Once the loop is finished, the function divides the `sum` variable by the `size` parameter to get the average of the array.
+5. Finally, the function returns the average as a double value.
+
+Here's an example of how you could use this function:
+```
+int main() {
+  int arr[5] = {1, 2, 3, 4, 5};
+  double avg = avg(arr, sizeof(arr) / sizeof(arr[0]));
+  printf("The average of the array is %f\n", avg);
+  return 0;
+}
+```
+This code will output "The average of the array is 3.2".
+
+llama_print_timings:        load time =  1426.28 ms
+llama_print_timings:      sample time =   223.24 ms /   367 runs   (    0.61 ms per token,  1643.99 tokens per second)
+llama_print_timings: prompt eval time =  1426.22 ms /    54 tokens (   26.41 ms per token,    37.86 tokens per second)
+llama_print_timings:        eval time = 209113.51 ms /   366 runs   (  571.35 ms per token,     1.75 tokens per second)
+llama_print_timings:       total time = 214841.60 ms
+
+
+-----------------------------------------------------------------------------------
+RTX A5000
+
+llama.cpp: loading model from /workspace/llama-2-7b-chat.ggmlv3.q4_K_M.bin
+llama_model_load_internal: format     = ggjt v3 (latest)
+llama_model_load_internal: n_vocab    = 32000
+llama_model_load_internal: n_ctx      = 512
+llama_model_load_internal: n_embd     = 4096
+llama_model_load_internal: n_mult     = 256
+llama_model_load_internal: n_head     = 32
+llama_model_load_internal: n_head_kv  = 32
+llama_model_load_internal: n_layer    = 32
+llama_model_load_internal: n_rot      = 128
+llama_model_load_internal: n_gqa      = 1
+llama_model_load_internal: rnorm_eps  = 5.0e-06
+llama_model_load_internal: n_ff       = 11008
+llama_model_load_internal: freq_base  = 10000.0
+llama_model_load_internal: freq_scale = 1
+llama_model_load_internal: ftype      = 15 (mostly Q4_K - Medium)
+llama_model_load_internal: model size = 7B
+llama_model_load_internal: ggml ctx size =    0.08 MB
+llama_model_load_internal: using CUDA for GPU acceleration
+llama_model_load_internal: mem required  =  372.40 MB (+  256.00 MB per state)
+llama_model_load_internal: allocating batch_size x (512 kB + n_ctx x 128 B) = 288 MB VRAM for the scratch buffer
+llama_model_load_internal: offloading 32 repeating layers to GPU
+llama_model_load_internal: offloading non-repeating layers to GPU
+llama_model_load_internal: offloading v cache to GPU
+llama_model_load_internal: offloading k cache to GPU
+llama_model_load_internal: offloaded 35/35 layers to GPU
+llama_model_load_internal: total VRAM used: 4365 MB
+llama_new_context_with_model: kv self size  =  256.00 MB
+AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
+Of course! Here is an example of a C function that takes an array of integers as input and returns the average of those numbers:
+```
+#include <stdio.h>
+
+double avg(int arr[], int size) {
+  double sum = 0;
+  int i;
+
+  for (i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+
+  return sum / size;
+}
+```
+Here's how the function works:
+
+1. The function takes two parameters: `arr` (an array of integers) and `size` (the number of elements in the array).
+2. The function initializes a variable `sum` to 0, which will be used to calculate the sum of all the elements in the array.
+3. It then loops through each element in the array using a `for` loop, adding each element to the `sum` variable.
+4. Once the loop is finished, the function divides the `sum` variable by the `size` parameter to get the average of the array.
+5. Finally, the function returns the average as a double value.
+
+Here's an example of how you could use this function:
+```
+int main() {
+  int arr[5] = {1, 2, 3, 4, 5};
+  double avg = avg(arr, sizeof(arr) / sizeof(arr[0]));
+  printf("The average of the array is %f\n", avg);
+  return 0;
+}
+```
+This code will output "The average of the array is 3.2".
+
+llama_print_timings:        load time =   398.61 ms
+llama_print_timings:      sample time =   235.63 ms /   367 runs   (    0.64 ms per token,  1557.49 tokens per second)
+llama_print_timings: prompt eval time =   398.56 ms /    54 tokens (    7.38 ms per token,   135.49 tokens per second)
+llama_print_timings:        eval time = 27425.90 ms /   366 runs   (   74.93 ms per token,    13.35 tokens per second)
+llama_print_timings:       total time = 28792.74 ms
+
