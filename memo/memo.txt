@@ -361,3 +361,24 @@ llama_print_timings: prompt eval time =   398.56 ms /    54 tokens (    7.38 ms 
 llama_print_timings:        eval time = 27425.90 ms /   366 runs   (   74.93 ms per token,    13.35 tokens per second)
 llama_print_timings:       total time = 28792.74 ms
 
+from llama_cpp import Llama
+
+# LLMの準備
+llm = Llama(model_path="/content/llama-2-7b-chat.ggmlv3.q4_K_M.bin",n_gpu_layers=16)
+
+# プロンプトの準備
+prompt = """
+<s> [INST] <<SYS>>
+You are a programmer, respectful and honest assistant. Always answer as helpfully as possible.
+<</SYS>>
+
+Write a c function that average numbers. [/INST]
+"""
+
+# 推論の実行
+output = llm(
+    prompt,
+    temperature=0,
+    max_tokens=2048,
+)
+print(output["choices"][0]["text"])
